@@ -1,13 +1,13 @@
 import { LitElement, html, css } from 'lit';
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
-// import "./large-card.js";
+import "./large-card.js";
 // import "./card.js";
 
 export class SiteSearch extends LitElement {
   static get properties() {
     return {
-      items: { type: Array, },
-      value: { type: String },
+      items: { type: Array, }, // array with json info
+      value: { type: String }, // info typed in the search bar
     };
   }
 
@@ -58,45 +58,86 @@ export class SiteSearch extends LitElement {
         <input id="input" placeholder="https://haxtheweb.org/..." />
         <button type="button" @click="${this.buttonPressed}">Analyze Site</button>
       </div>
-      <div class="results">
 
+      <large-card id="largeCard"
+
+      ></large-card>
+
+      <div class="results">
       </div>
     </div>
-
     `;
+    
+    // ${this.items.map((item, index) => html`
+    //   <large-card
+    //     title=""
+    //     description=""
+    //     logo=""
+    //     theme=""
+    //     created=""
+    //     lastUpdated=""
+    //   ></large-card>
+    // `)}
   }
 
   buttonPressed() {
     this.value = this.shadowRoot.querySelector('#input').value;
-    console.log(this.value);
+    // console.log("this.value: "+this.value);
+
     if (this.value) {
-      this.updateResults(this.value);
+      this.fetchResults();
     }
     else if (!this.value) {
-      this.items = [];
-      console.log("Value of this.items: " + this.items);
+      this.resetLargeCard();
     }
   }
 
-  // life cycle will run when anything defined in `properties` is modified
-  updated(changedProperties) {
-    // @debugging purposes only IMPORTANT FOR TESTING
-    if (changedProperties.has('items') && this.items.length > 0) {
-      console.log(this.items);
-    }
-  }
-
-  updateResults(value) {
-    this.loading = true;
-    // promise. If response is ok, json.
-    fetch(`https://haxtheweb.org/site.json`).then(d => d.ok ? d.json(): {}).then(data => {
-      // If has a data collection
+  fetchResults() {
+    fetch('https://haxtheweb.org/site.json')
+    .then(response => { if (!response.ok) { throw new Error('Could not reach website'); } return response.json();})
+    .then(data => {
       if (data.items) {
-        this.items = [];
         this.items = data.items;
-        this.loading = false;
-      }  
+
+        var count = 0; // counts matches
+        for (let i = 0; i < this.items.length; i++) {
+          // find if URL is equal to slug
+            // Selects the large-card tag
+          const myElement = this.shadowRoot.getElementById('largeCard');
+            // Uses regex to find and extract the slug part of the URL
+          const extractedSlug = this.extractSlug(this.value);
+
+          if(extractedSlug == this.items[i].slug) {
+            count++;
+            myElement.setAttribute('title', this.items[i].title);
+            myElement.setAttribute('description', this.items[i].description);
+            // myElement.setAttribute('logo', this.items[i].logo);
+            // myElement.setAttribute('theme', this.items[i].title);
+            myElement.setAttribute('created', this.items[i].metadata.created);
+            myElement.setAttribute('lastUpdated', this.items[i].metadata.updated);
+          }
+          if(count == 0){ // If 0 matches, reset attributes
+            this.resetLargeCard();
+          }
+        }
+      }
     });
+  }
+  extractSlug(url) {
+    // captures text after "https://haxtheweb.org/"
+    // matches zero or more characters
+    const urlPattern = /https:\/\/haxtheweb\.org\/(.*)/;
+    const match = url.match(urlPattern);
+    return match && match[1] ? match[1] : null; // Return the slug if it exists
+  }
+  resetLargeCard() {
+    const myElement = this.shadowRoot.getElementById('largeCard');
+    myElement.setAttribute('title', '');
+    myElement.setAttribute('description', '');
+    // myElement.setAttribute('logo', '');
+    // myElement.setAttribute('theme', '');
+    myElement.setAttribute('created', '');
+    myElement.setAttribute('lastUpdated', '');
   }
 
   static get tag() {
