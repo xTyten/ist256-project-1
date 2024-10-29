@@ -28,36 +28,38 @@ export class LargeCard extends LitElement {
 
   static get styles() {
     return [css`
-      .inner-wrapper {
+      :host {
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        width: 80%;
+        padding: var(--ddd-spacing-6); //24px;
 
-        border: solid;
-        width: 100%;
-        // width: calc(100% - 48px); // parents' width - 48px
+        border: var(--ddd-border-md);
+        border-color: var(--ddd-theme-default-limestoneGray);
+        border-radius: var(--ddd-radius-xs);
+        box-shadow: var(--ddd-boxShadow-md);
       }
 
       .text-wrapper {
         display: flex;
         flex-direction: column;
+        padding: var(--ddd-spacing-4); //16px
       }
     `];
   }
 
   render() {
     return html`
-    <div class="inner-wrapper">
-        <img src="${this.logo}"/>
-        <div class="text-wrapper">
-          <h3>${this.title}</h3>
-          <p>${this.description}</p>
-          <p>${this.theme}</p>
-          <p>${this.created}</p>
-          <p>${this.lastUpdated}</p>
-        </div>
-    </div>
+      <img src="${this.logo}"/>
+      <div class="text-wrapper">
+        <h3>${this.title}</h3>
+        <p>${this.description}</p>
+        <p>${this.theme}</p>
+        <p>${this.created}</p>
+        <p>${this.lastUpdated}</p>
+      </div>
     `;
   }
   static get tag() {

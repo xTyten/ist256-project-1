@@ -13,12 +13,12 @@ export class SiteSearch extends LitElement {
 
   static get styles() {
     return css`
-      .siteSearchWrapper {
-        display: flex;
+      :host{
         width: 100%;
+        display: flex;
         flex-direction: column;
+        justify-content: center;
       }
-
       .search {
         display: flex;
         align-items: center;
@@ -29,7 +29,7 @@ export class SiteSearch extends LitElement {
         font-size: 20px;
         line-height: 40px;
         width: 70%;
-        padding-left: 8px;
+        padding-left: var(--ddd-spacing-2); //8px
       }
       button {
         height: 46px;
@@ -39,6 +39,10 @@ export class SiteSearch extends LitElement {
         font-family: 'Roboto';
         font-size: 16px;
         font-weight: bold;
+      }
+      large-card {
+        margin-left: auto;
+        margin-right: auto;
       }
     `;
   }
@@ -52,19 +56,15 @@ export class SiteSearch extends LitElement {
   render() {
     // Map: for each item in the array, get item and index
     return html`
-    <div class="siteSearchWrapper">
-      <h3>Input a HAX site</h3>
-      <div class="search">
-        <input id="input" placeholder="https://haxtheweb.org/..." />
-        <button type="button" @click="${this.buttonPressed}">Analyze Site</button>
-      </div>
+    <h3 class="fs-3xl m-0">Input a HAX site</h3>
+    <div class="search">
+      <input id="input" placeholder="https://haxtheweb.org/..." />
+      <button type="button" @click="${this.buttonPressed}">Analyze Site</button>
+    </div>
 
-      <large-card id="largeCard"
+    <large-card id="largeCard"></large-card>
 
-      ></large-card>
-
-      <div class="results">
-      </div>
+    <div class="results">
     </div>
     `;
     
