@@ -29,8 +29,6 @@ export class SiteSearch extends LitElement {
         font-size: 20px;
         line-height: 40px;
         width: 70%;
-      }
-      ::placeholder {
         padding-left: 8px;
       }
       button {
@@ -48,7 +46,6 @@ export class SiteSearch extends LitElement {
   constructor() {
     super();
     this.value = null;
-    this.loading = false;
     this.items = [];
   }
 
@@ -58,8 +55,8 @@ export class SiteSearch extends LitElement {
     <div class="siteSearchWrapper">
       <h3>Input a HAX site</h3>
       <div class="search">
-        <input id="input" placeholder="https://haxtheweb.org/..." @input="${this.inputChanged}" />
-        <button type="button">Analyze Site</button>
+        <input id="input" placeholder="https://haxtheweb.org/..." />
+        <button type="button" @click="${this.buttonPressed}">Analyze Site</button>
       </div>
       <div class="results">
 
@@ -69,18 +66,20 @@ export class SiteSearch extends LitElement {
     `;
   }
 
-  inputChanged(e) {
+  buttonPressed() {
     this.value = this.shadowRoot.querySelector('#input').value;
-  }
-  // life cycle will run when anything defined in `properties` is modified
-  updated(changedProperties) {
-    // see if value changes from user input and is not empty
-    if (changedProperties.has('value') && this.value) {
+    console.log(this.value);
+    if (this.value) {
       this.updateResults(this.value);
     }
-    else if (changedProperties.has('value') && !this.value) {
+    else if (!this.value) {
       this.items = [];
+      console.log("Value of this.items: " + this.items);
     }
+  }
+
+  // life cycle will run when anything defined in `properties` is modified
+  updated(changedProperties) {
     // @debugging purposes only IMPORTANT FOR TESTING
     if (changedProperties.has('items') && this.items.length > 0) {
       console.log(this.items);
@@ -90,12 +89,12 @@ export class SiteSearch extends LitElement {
   updateResults(value) {
     this.loading = true;
     // promise. If response is ok, json.
-    fetch(`https://haxtheweb.org/site.json${value}`).then(d => d.ok ? d.json(): {}).then(data => {
+    fetch(`https://haxtheweb.org/site.json`).then(d => d.ok ? d.json(): {}).then(data => {
       // If has a data collection
       if (data.items) {
-        // this.items = [];
-        // this.items = data.collection.items;
-        // this.loading = false;
+        this.items = [];
+        this.items = data.items;
+        this.loading = false;
       }  
     });
   }
