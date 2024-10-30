@@ -47,6 +47,11 @@ export class LargeCard extends LitElement {
         flex-direction: column;
         padding: var(--ddd-spacing-4); //16px
       }
+
+      img {
+        width: 400px;
+        height: 400px;
+      }
     `];
   }
 
