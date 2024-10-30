@@ -5,12 +5,12 @@ export class LargeCard extends LitElement {
 
   constructor() {
     super();
-    this.title = 'title';
-    this.description = 'description';
-    this.logo = 'https://placehold.co/400x400'; // ???
-    this.theme = 'theme';
-    this.created = 'created'; // ???
-    this.lastUpdated = 'lastupdated'; // ???
+    this.title = '';
+    this.description = '';
+    this.logo = ''; 
+    this.theme = '';
+    this.created = ''; 
+    this.lastUpdated = ''; 
     // ??? Use hexCode from the metadata
     // ??? Use icon by leveraging simple-icon library
   }

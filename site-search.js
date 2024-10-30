@@ -100,21 +100,26 @@ export class SiteSearch extends LitElement {
       } return response.json();})
     .catch(error => {
       this.resetLargeCard();
+
+      const myElement = this.shadowRoot.getElementById('largeCard');
+      myElement.setAttribute('title', 'Not valid website');
     })
     .then(data => {
       if (data) {
         this.data = data;
+        this.title = this.data.title;
+        this.metadata = this.data.metadata;
+        this.items = this.data.items;
         
         const myElement = this.shadowRoot.getElementById('largeCard');
-        myElement.setAttribute('title', this.data.title);
+        myElement.setAttribute('title', this.title);
         myElement.setAttribute('description', this.data.description);
+        // String concatenation. https://haxtheweb.org + / + files/hax (1).png
+        myElement.setAttribute('logo', this.removeSlug(this.value)+"/"+this.metadata.site.logo);
 
-        myElement.setAttribute('logo', this.removeSlug(this.value)+"/"+this.data.metadata.site.logo);
-        // myElement.setAttribute('logo', 'https://haxtheweb.org/files/hax%20(1).png');
-
-        myElement.setAttribute('theme', this.data.metadata.theme.name);
-        myElement.setAttribute('created', this.data.metadata.site.created);
-        myElement.setAttribute('lastUpdated', this.data.metadata.site.updated);
+        myElement.setAttribute('theme', this.metadata.theme.name);
+        myElement.setAttribute('created', this.metadata.site.created);
+        myElement.setAttribute('lastUpdated', this.metadata.site.updated);
         
         // var count = 0; // counts matches
         // for (let i = 0; i < this.items.length; i++) {
