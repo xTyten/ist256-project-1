@@ -132,25 +132,15 @@ export class SiteSearch extends LitElement {
         myElement.setAttribute('created', this.metadata.site.created);
         myElement.setAttribute('lastUpdated', this.metadata.site.updated);
 
-        // const test = this.items.map((item) => html`
-        //   <small-card>
-        //     title="${item.title}"
-        //     lastUpdated="${item.metadata.updated}"
-        //     description="${item.description}"
-        //     logo="${item.metadata.images[0]}"
-        //     slug="${item.slug}"
-        //     source="${item.location}"
-        //   </small-card>
-        // `);
-
         this.items.map((item) => {
           const sc = document.createElement('small-card');
           sc.setAttribute('title', item.title);
           sc.setAttribute('lastUpdated', item.metadata.updated);
           sc.setAttribute('description', item.description);
-          sc.setAttribute('logo', item.metadata.images[0]);
+          sc.setAttribute('logo', this.removeSlug(this.value)+"/"+item.metadata.images[0]);
           sc.setAttribute('slug', item.slug);
           sc.setAttribute('source', item.location);
+          sc.setAttribute('domain', this.removeSlug(this.value));
 
           const container = this.shadowRoot.getElementById("results");
           container.appendChild(sc);
@@ -167,6 +157,9 @@ export class SiteSearch extends LitElement {
     myElement.setAttribute('theme', '');
     myElement.setAttribute('created', '');
     myElement.setAttribute('lastUpdated', '');
+
+    const container = this.shadowRoot.getElementById('results');
+    container.innerHTML = '';
   }
   addSiteJson(url) { // checks if the input website has /site.json. If it doesn't, add it
     return url.replace(/(\/site\.json)?$/, "/site.json");

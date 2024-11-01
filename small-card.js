@@ -11,6 +11,7 @@ export class SmallCard extends LitElement {
     this.logo = '';
     this.slug = 'Slug'; 
     this.source = 'Source';
+    this.domain
   }
 
   static get properties() {
@@ -21,6 +22,7 @@ export class SmallCard extends LitElement {
       logo: { type: String },
       slug: { type: String },
       source: { type: String },
+      domain: { type: String },
     };
   }
 
@@ -31,6 +33,7 @@ export class SmallCard extends LitElement {
         flex: 1 1 calc(33.33% - 8px);
         max-width: 632px;
         min-width: 200px;
+        max-height: 600px;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -49,6 +52,12 @@ export class SmallCard extends LitElement {
         display: flex;
         flex-direction: column;
         padding: var(--ddd-spacing-4); //16px
+        width: 100%;
+        max-width: 300px;
+
+        display: inline-block;
+        overflow-wrap: break-word;
+        word-wrap: break-word; //wraps the "one word" links
       }
 
       h4, p {
@@ -60,20 +69,36 @@ export class SmallCard extends LitElement {
       img {
         width: 100px;
         height: 100px;
+        object-fit: cover;
+      }
+
+      a {
+        text-decoration: inherit;
+        color: inherit;
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
     `];
   }
 
   render() {
     return html`
-      <img src="${this.logo}"/>
-      <div class="text-wrapper">
-        <h4>${this.title}</h4>
-        <p>${this.lastUpdated}</p>
-        <p>${this.description}</p>
-        <p>${this.slug}</p>
-        <p>${this.source}</p>
-      </div>
+      <a href="${this.domain}/${this.slug}">
+        <img src="${this.logo}"/>
+        <div class="text-wrapper">
+          <h4>${this.title}</h4>
+          <p>${this.lastUpdated}</p>
+          <p>${this.description}</p>
+          <button onclick="location.href='${this.domain}/${this.slug}';">Link to page</button>
+          <p>${this.domain}/${this.slug}</p>
+          <button onclick="location.href='${this.domain}/${this.source}';">Link to source</button>
+          <p>${this.domain}/${this.source}</p>
+          <!-- Nested <a> tags are illegal -->
+        </div>
+      </a>
     `;
   }
   static get tag() {
