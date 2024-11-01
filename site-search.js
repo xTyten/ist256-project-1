@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import "./large-card.js";
-// import "./card.js";
+import "./small-card.js";
 
 export class SiteSearch extends LitElement {
   static get properties() {
@@ -45,6 +45,18 @@ export class SiteSearch extends LitElement {
         margin-left: auto;
         margin-right: auto;
       }
+      .results {
+        margin-top: 24px;
+        margin-bottom: 24px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); // 3 columns with same width
+        width: 80%;
+        flex-wrap: wrap;
+        flex-direction: row;
+        margin-left: auto;
+        margin-right: auto;
+        gap: 8px;
+      }
     `;
   }
 
@@ -65,20 +77,35 @@ export class SiteSearch extends LitElement {
 
     <large-card id="largeCard"></large-card>
 
+    <!-- MAKE THIS RUN AFTER THE BUTTON IS CLICKED -->
     <div class="results">
+      ${this.items.map((item, index) => html`
+        <small-card
+          title="${item.title[0]}"
+        ></small-card>
+      `)}
     </div>
     `;
     
     // ${this.items.map((item, index) => html`
-    //   <large-card
-    //     title=""
-    //     description=""
-    //     logo=""
-    //     theme=""
-    //     created=""
-    //     lastUpdated=""
-    //   ></large-card>
+    //   <small-card
+    //      title="${item.title[0]}"
+    //      lastUpdated="${}"
+    //      description="${}"
+    //      logo="${}"
+    //      slug="${}"
+    //      source="${}"
+    //   ></small-card>
     // `)}
+
+    // ${this.items.map((item, index) => html`
+    //   <nasa-image
+    //     source="${item.links[0].href}"
+    //     title="${item.data[0].title}"
+    //     altText="${item.data[0].description_508}"
+    //     secondCreator="${item.data[0].secondary_creator}"
+    //   ></nasa-image>
+    //   `)}
   }
 
   buttonPressed() {
@@ -90,6 +117,7 @@ export class SiteSearch extends LitElement {
     else if (!this.value) {
       this.resetLargeCard();
     }
+
   }
 
   fetchResults() {
