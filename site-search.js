@@ -45,17 +45,14 @@ export class SiteSearch extends LitElement {
         margin-left: auto;
         margin-right: auto;
       }
-      .results {
-        margin-top: 24px;
-        margin-bottom: 24px;
+      #results {
+        margin: 24px auto;
         display: grid;
         grid-template-columns: repeat(3, 1fr); // 3 columns with same width
-        width: 80%;
         flex-wrap: wrap;
         flex-direction: row;
-        margin-left: auto;
-        margin-right: auto;
         gap: 8px;
+        width: 80%;
       }
     `;
   }
@@ -78,12 +75,7 @@ export class SiteSearch extends LitElement {
     <large-card id="largeCard"></large-card>
 
     <!-- MAKE THIS RUN AFTER THE BUTTON IS CLICKED -->
-    <div class="results">
-      ${this.items.map((item, index) => html`
-        <small-card
-          title="${item.title[0]}"
-        ></small-card>
-      `)}
+    <div id="results">
     </div>
     `;
     
@@ -91,21 +83,12 @@ export class SiteSearch extends LitElement {
     //   <small-card
     //      title="${item.title[0]}"
     //      lastUpdated="${}"
-    //      description="${}"
+    //      description="${item.description[0]}"
     //      logo="${}"
     //      slug="${}"
     //      source="${}"
     //   ></small-card>
     // `)}
-
-    // ${this.items.map((item, index) => html`
-    //   <nasa-image
-    //     source="${item.links[0].href}"
-    //     title="${item.data[0].title}"
-    //     altText="${item.data[0].description_508}"
-    //     secondCreator="${item.data[0].secondary_creator}"
-    //   ></nasa-image>
-    //   `)}
   }
 
   buttonPressed() {
@@ -117,7 +100,6 @@ export class SiteSearch extends LitElement {
     else if (!this.value) {
       this.resetLargeCard();
     }
-
   }
 
   fetchResults() {
@@ -130,7 +112,9 @@ export class SiteSearch extends LitElement {
       this.resetLargeCard();
 
       const myElement = this.shadowRoot.getElementById('largeCard');
-      myElement.setAttribute('title', 'Not valid website');
+      const container = this.shadowRoot.getElementById('results');
+      myElement.setAttribute('title', 'Not valid');
+      container.innerHTML = ''; // removes everything inside the div
     })
     .then(data => {
       if (data) {
@@ -144,42 +128,37 @@ export class SiteSearch extends LitElement {
         myElement.setAttribute('description', this.data.description);
         // String concatenation. https://haxtheweb.org + / + files/hax (1).png
         myElement.setAttribute('logo', this.removeSlug(this.value)+"/"+this.metadata.site.logo);
-
         myElement.setAttribute('theme', this.metadata.theme.name);
         myElement.setAttribute('created', this.metadata.site.created);
         myElement.setAttribute('lastUpdated', this.metadata.site.updated);
-        
-        // var count = 0; // counts matches
-        // for (let i = 0; i < this.items.length; i++) {
-        //   // find if URL is equal to slug
-        //     // Selects the large-card tag
-        //   const myElement = this.shadowRoot.getElementById('largeCard');
-        //     // Uses regex to find and extract the slug part of the URL
-        //   const extractedSlug = this.extractSlug(this.value);
 
-        //   if(extractedSlug == this.items[i].slug) {
-        //     count++;
-        //     myElement.setAttribute('title', this.items[i].title);
-        //     myElement.setAttribute('description', this.items[i].description);
-        //     // myElement.setAttribute('logo', this.items[i].logo);
-        //     // myElement.setAttribute('theme', this.items[i].title);
-        //     myElement.setAttribute('created', this.items[i].metadata.created);
-        //     myElement.setAttribute('lastUpdated', this.items[i].metadata.updated);
-        //   }
-        //   if(count == 0){ // If 0 matches, reset attributes
-        //     this.resetLargeCard();
-        //   }
-        // }
+        // const test = this.items.map((item) => html`
+        //   <small-card>
+        //     title="${item.title}"
+        //     lastUpdated="${item.metadata.updated}"
+        //     description="${item.description}"
+        //     logo="${item.metadata.images[0]}"
+        //     slug="${item.slug}"
+        //     source="${item.location}"
+        //   </small-card>
+        // `);
+
+        this.items.map((item) => {
+          const sc = document.createElement('small-card');
+          sc.setAttribute('title', item.title);
+          sc.setAttribute('lastUpdated', item.metadata.updated);
+          sc.setAttribute('description', item.description);
+          sc.setAttribute('logo', item.metadata.images[0]);
+          sc.setAttribute('slug', item.slug);
+          sc.setAttribute('source', item.location);
+
+          const container = this.shadowRoot.getElementById("results");
+          container.appendChild(sc);
+        });
       }
     });
   }
-  // extractSlug(url) {
-  //   // captures text after "https://haxtheweb.org/"
-  //   // matches zero or more characters
-  //   const urlPattern = /https:\/\/haxtheweb\.org\/(.*)/;
-  //   const match = url.match(urlPattern);
-  //   return match && match[1] ? match[1] : null; // Return the slug if it exists
-  // }
+
   resetLargeCard() {
     const myElement = this.shadowRoot.getElementById('largeCard');
     myElement.setAttribute('title', '');

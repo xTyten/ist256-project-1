@@ -30,6 +30,7 @@ export class SmallCard extends LitElement {
         display: flex;
         flex: 1 1 calc(33.33% - 8px);
         max-width: 632px;
+        min-width: 200px;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -53,6 +54,7 @@ export class SmallCard extends LitElement {
       h4, p {
         margin-top: 4px;
         margin-bottom: 4px;
+        font-size: 16px;
       }
 
       img {
