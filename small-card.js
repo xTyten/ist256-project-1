@@ -80,25 +80,68 @@ export class SmallCard extends LitElement {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        width: 100%;
+        height: 100%;
+        
+        /* display: flex;
+        flex: 1 1 calc(33.33% - 8px);
+        max-width: 632px;
+        min-width: 200px;
+        max-height: 600px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: var(--ddd-spacing-4); //16px;
+
+        box-sizing: border-box;
+        border: var(--ddd-border-md);
+        border-color: var(--ddd-theme-default-limestoneGray);
+        border-radius: var(--ddd-radius-xs);
+        box-shadow: var(--ddd-boxShadow-md);
+
+        text-wrap: wrap; */
       }
     `];
   }
 
+  convertUnixToDate(unixTimestamp) {
+    // Convert to milliseconds
+    const date = new Date(unixTimestamp * 1000);
+    
+    // Format the date to a string
+    const options = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false // Change to true for 12-hour format
+    };
+    
+    // Format the date and return the string
+    const formattedDate = date.toLocaleString('en-US', options);
+    return formattedDate; // Return the formatted date string
+  }
+
+
   render() {
     return html`
       <a href="${this.domain}/${this.slug}">
-        <img src="${this.logo}"/>
+        <img src="${this.logo}" alt="${this.title}"/>
         <div class="text-wrapper">
           <h4>${this.title}</h4>
-          <p>${this.lastUpdated}</p>
+          <p>Last Updated: ${this.convertUnixToDate(this.lastUpdated)}</p>
           <p>${this.description}</p>
           <button onclick="location.href='${this.domain}/${this.slug}';">Link to page</button>
-          <p>${this.domain}/${this.slug}</p>
-          <button onclick="location.href='${this.domain}/${this.source}';">Link to source</button>
-          <p>${this.domain}/${this.source}</p>
+          <!-- <p>${this.domain}/${this.slug}</p> -->
+          <button onclick="event.stopPropagation(); event.preventDefault(); window.location.href='${this.domain}/${this.source}';">Link to source</button>
+          <!-- event.stopPropagation() stops the button from following the a tag. event.preventDefault() prevents the anchor's default action -->
+          <!-- <p>${this.domain}/${this.source}</p> -->
           <!-- Nested <a> tags are illegal -->
         </div>
       </a>
+      </div>
     `;
   }
   static get tag() {

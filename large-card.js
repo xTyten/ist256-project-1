@@ -55,18 +55,39 @@ export class LargeCard extends LitElement {
     `];
   }
 
+  convertUnixToDate(unixTimestamp) {
+    // Convert to milliseconds
+    const date = new Date(unixTimestamp * 1000);
+    
+    // Format the date to a string
+    const options = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false // Change to true for 12-hour format
+    };
+    
+    // Format the date and return the string
+    const formattedDate = date.toLocaleString('en-US', options);
+    return formattedDate; // Return the formatted date string
+  }
+
   render() {
     return html`
-      <img src="${this.logo}"/>
+      <img src="${this.logo}" alt="Logo"/>
       <div class="text-wrapper">
         <h3>${this.title}</h3>
         <p>${this.description}</p>
-        <p>${this.theme}</p>
-        <p>${this.created}</p>
-        <p>${this.lastUpdated}</p>
+        <p>Theme: ${this.theme}</p>
+        <p>Created: ${this.convertUnixToDate(this.created)}</p>
+        <p>Last Updated: ${this.convertUnixToDate(this.lastUpdated)}</p>
       </div>
     `;
   }
+
   static get tag() {
     return "large-card";
   }
