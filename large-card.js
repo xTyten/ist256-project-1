@@ -1,18 +1,16 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 
-export class LargeCard extends LitElement {
+export class LargeCard extends DDDSuper(LitElement) {
 
   constructor() {
     super();
-    this.title = '';
+    this.title = 'Type in a URL';
     this.description = '';
     this.logo = ''; 
     this.theme = '';
-    this.created = ''; 
-    this.lastUpdated = ''; 
-    // ??? Use hexCode from the metadata
-    // ??? Use icon by leveraging simple-icon library
+    this.created = 'N/A'; 
+    this.lastUpdated = 'N/A'; 
   }
 
   static get properties() {
@@ -51,6 +49,7 @@ export class LargeCard extends LitElement {
       img {
         width: 400px;
         height: 400px;
+        object-fit: cover;
       }
     `];
   }

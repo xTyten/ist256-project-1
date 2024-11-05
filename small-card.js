@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 
-export class SmallCard extends LitElement {
+export class SmallCard extends DDDSuper(LitElement) {
 
   constructor() {
     super();
@@ -47,7 +47,6 @@ export class SmallCard extends LitElement {
 
         text-wrap: wrap;
       }
-
       .text-wrapper {
         display: flex;
         flex-direction: column;
@@ -61,9 +60,9 @@ export class SmallCard extends LitElement {
       }
 
       h4, p {
-        margin-top: 4px;
-        margin-bottom: 4px;
-        font-size: 16px;
+        margin-top: var(--ddd-spacing-1);
+        margin-bottom: var(--ddd-spacing-1); //4px, 8px, 12px, 16px, 20px, 24px
+        font-size: var(--ddd-font-size-4xs);
       }
 
       img {
@@ -82,24 +81,17 @@ export class SmallCard extends LitElement {
         align-items: center;
         width: 100%;
         height: 100%;
-        
-        /* display: flex;
-        flex: 1 1 calc(33.33% - 8px);
-        max-width: 632px;
-        min-width: 200px;
-        max-height: 600px;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: var(--ddd-spacing-4); //16px;
+      }
 
-        box-sizing: border-box;
-        border: var(--ddd-border-md);
-        border-color: var(--ddd-theme-default-limestoneGray);
-        border-radius: var(--ddd-radius-xs);
-        box-shadow: var(--ddd-boxShadow-md);
-
-        text-wrap: wrap; */
+      button {
+        height: 32px;
+        background-color: var(--ddd-theme-default-beaverBlue);
+        color: var(--ddd-theme-default-white);
+        font-weight: var(--ddd-font-weight-bold, 700);
+        font-size: var(--ddd-spacing-4); //16px
+      }
+      button:hover, button:focus {
+        background-color: var(--ddd-theme-default-beaver70);
       }
     `];
   }

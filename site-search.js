@@ -3,7 +3,7 @@ import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import "./large-card.js";
 import "./small-card.js";
 
-export class SiteSearch extends LitElement {
+export class SiteSearch extends DDDSuper(LitElement) {
   static get properties() {
     return {
       data: { type: Array, }, // array with json info
@@ -23,10 +23,10 @@ export class SiteSearch extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: var(--ddd-spacing-1); //4px;
       }
       #input {
-        font-size: 20px;
+        font-size: var(--ddd-font-size-xxs); //20px;
         line-height: 40px;
         width: 70%;
         padding-left: var(--ddd-spacing-2); //8px
@@ -36,23 +36,28 @@ export class SiteSearch extends LitElement {
         width: 10%;
         background-color: var(--ddd-theme-default-nittanyNavy);
         color: var(--ddd-theme-default-white);
-        font-family: 'Roboto';
-        font-size: 16px;
-        font-weight: bold;
+        font-weight: var(--ddd-font-weight-bold, 700);
+        font-size: var(--ddd-spacing-4); //16px
+      }
+      button:hover, button:focus {
+        background-color: var(--ddd-theme-default-navy60);
       }
       large-card {
-        margin-top: 24px;
+        margin-top: var(--ddd-spacing-6); //24px;
         margin-left: auto;
         margin-right: auto;
       }
       #results {
-        margin: 24px auto;
+        margin: var(--ddd-spacing-6) auto; //24px;
         display: grid;
         grid-template-columns: repeat(3, 1fr); // 3 columns with same width
         flex-wrap: wrap;
         flex-direction: row;
-        gap: 8px;
+        gap: var(--ddd-spacing-2); //8px
         width: 80%;
+      }
+      h3 {
+        font-size: var(--ddd-font-size-m);
       }
     `;
   }
@@ -66,7 +71,7 @@ export class SiteSearch extends LitElement {
   render() {
     // Map: for each item in the array, get item and index
     return html`
-    <h3 class="fs-3xl m-0">Input a HAX site</h3>
+    <h3>Input a HAX site</h3>
     <div class="search">
       <input id="input" placeholder="Type in a website URL that uses HAX" />
       <button type="button" @click="${this.buttonPressed}">Analyze Site</button>
@@ -78,17 +83,6 @@ export class SiteSearch extends LitElement {
     <div id="results">
     </div>
     `;
-    
-    // ${this.items.map((item, index) => html`
-    //   <small-card
-    //      title="${item.title[0]}"
-    //      lastUpdated="${}"
-    //      description="${item.description[0]}"
-    //      logo="${}"
-    //      slug="${}"
-    //      source="${}"
-    //   ></small-card>
-    // `)}
   }
 
   buttonPressed() {
@@ -98,7 +92,7 @@ export class SiteSearch extends LitElement {
       this.fetchResults();
     }
     else if (!this.value) {
-      this.resetLargeCard();
+      this.resetCards();
     }
   }
 
@@ -109,15 +103,18 @@ export class SiteSearch extends LitElement {
         throw new Error('Could not reach website'); 
       } return response.json();})
     .catch(error => {
-      this.resetLargeCard();
+      this.resetCards();
 
       const myElement = this.shadowRoot.getElementById('largeCard');
-      const container = this.shadowRoot.getElementById('results');
-      myElement.setAttribute('title', 'Not valid');
-      container.innerHTML = ''; // removes everything inside the div
+      myElement.setAttribute('title', 'URL is not valid');
+      myElement.setAttribute('description', 'Make sure your URL has "https://" at the beginning');
+      myElement.setAttribute('theme', 'N/A');
+      myElement.setAttribute('created', 'N/A');
+      myElement.setAttribute('lastUpdated', 'N/A');
     })
     .then(data => {
       if (data) {
+        this.resetCards();
         this.data = data;
         this.title = this.data.title;
         this.metadata = this.data.metadata;
@@ -149,7 +146,7 @@ export class SiteSearch extends LitElement {
     });
   }
 
-  resetLargeCard() {
+  resetCards() {
     const myElement = this.shadowRoot.getElementById('largeCard');
     myElement.setAttribute('title', '');
     myElement.setAttribute('description', '');
