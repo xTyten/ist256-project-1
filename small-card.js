@@ -11,7 +11,7 @@ export class SmallCard extends DDDSuper(LitElement) {
     this.logo = '';
     this.slug = 'Slug'; 
     this.source = 'Source';
-    this.domain
+    this.id = '';
   }
 
   static get properties() {
@@ -23,6 +23,7 @@ export class SmallCard extends DDDSuper(LitElement) {
       slug: { type: String },
       source: { type: String },
       domain: { type: String },
+      id: { type: String },
     };
   }
 
@@ -129,6 +130,7 @@ export class SmallCard extends DDDSuper(LitElement) {
           <button onclick="event.stopPropagation(); event.preventDefault(); window.open('${this.domain}/${this.slug}', '_blank');">Link to page</button>
           <button onclick="event.stopPropagation(); event.preventDefault(); window.open('${this.domain}/${this.source}', '_blank');">Link to source</button>
           <!-- event.stopPropagation() stops the button from following the a tag. event.preventDefault() prevents the anchor's default action -->
+           <p>Site ID: ${this.id}</p>
           <!-- Nested <a> tags are illegal -->
         </div>
       </a>

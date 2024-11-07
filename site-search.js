@@ -128,6 +128,7 @@ export class SiteSearch extends DDDSuper(LitElement) {
         myElement.setAttribute('theme', this.metadata.theme.name);
         myElement.setAttribute('created', this.metadata.site.created);
         myElement.setAttribute('lastUpdated', this.metadata.site.updated);
+        myElement.setAttribute('icon', this.metadata.theme.variables.icon);
 
         this.items.map((item) => {
           const sc = document.createElement('small-card');
@@ -138,6 +139,7 @@ export class SiteSearch extends DDDSuper(LitElement) {
           sc.setAttribute('slug', item.slug);
           sc.setAttribute('source', item.location);
           sc.setAttribute('domain', this.removeSlug(this.value));
+          sc.setAttribute('id', item.id);
 
           const container = this.shadowRoot.getElementById("results");
           container.appendChild(sc);

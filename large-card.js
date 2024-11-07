@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
+import '@haxtheweb/simple-icon/simple-icon.js';
 
 export class LargeCard extends DDDSuper(LitElement) {
 
@@ -11,6 +12,7 @@ export class LargeCard extends DDDSuper(LitElement) {
     this.theme = '';
     this.created = 'N/A'; 
     this.lastUpdated = 'N/A'; 
+    this.icon = '';
   }
 
   static get properties() {
@@ -21,6 +23,7 @@ export class LargeCard extends DDDSuper(LitElement) {
       theme: { type: String },
       created: { type: String },
       lastUpdated: { type: String },
+      icon: { type: String },
     };
   }
 
@@ -51,6 +54,13 @@ export class LargeCard extends DDDSuper(LitElement) {
         height: 400px;
         object-fit: cover;
       }
+
+      .titleIcon {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: var(--ddd-spacing-6);
+      }
     `];
   }
 
@@ -78,7 +88,10 @@ export class LargeCard extends DDDSuper(LitElement) {
     return html`
       <img src="${this.logo}" alt="Logo"/>
       <div class="text-wrapper">
-        <h3>${this.title}</h3>
+        <div class="titleIcon">
+          <h3>${this.title}</h3>
+          <simple-icon icon="${this.icon}"></simple-icon>
+        </div>
         <p>${this.description}</p>
         <p>Theme: ${this.theme}</p>
         <p>Created: ${this.convertUnixToDate(this.created)}</p>
