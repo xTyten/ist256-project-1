@@ -93,9 +93,9 @@ export class LargeCard extends DDDSuper(LitElement) {
           <simple-icon icon="${this.icon}"></simple-icon>
         </div>
         <p>${this.description}</p>
-        <p>Theme: ${this.theme}</p>
-        <p>Created: ${this.convertUnixToDate(this.created)}</p>
-        <p>Last Updated: ${this.convertUnixToDate(this.lastUpdated)}</p>
+        <p><b>Theme: </b>${this.theme}</p>
+        <p><b>Created: </b>${this.convertUnixToDate(this.created)}</p>
+        <p><b>Last Updated: </b>${this.convertUnixToDate(this.lastUpdated)}</p>
       </div>
     `;
   }
