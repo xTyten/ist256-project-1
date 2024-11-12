@@ -121,16 +121,16 @@ export class SmallCard extends DDDSuper(LitElement) {
   render() {
     return html`
       <a href="${this.domain}/${this.slug}" target="_blank">
-        <img src="${this.logo}" alt="${this.title}"/>
+        <img src="${this.logo}" alt="${this.title}" onerror="this.onerror=null; this.remove();"/> <!-- Image doesn't run if source isn't found -->
         <div class="text-wrapper">
           <h4>${this.title}</h4>
-          <p>Last Updated: ${this.convertUnixToDate(this.lastUpdated)}</p>
+          <p><b>Last Updated: </b>${this.convertUnixToDate(this.lastUpdated)}</p>
           <p>${this.description}</p>
           <!-- <button onclick="location.href='${this.domain}/${this.slug}';">Link to page</button> -->
           <button onclick="event.stopPropagation(); event.preventDefault(); window.open('${this.domain}/${this.slug}', '_blank');">Link to page</button>
           <button onclick="event.stopPropagation(); event.preventDefault(); window.open('${this.domain}/${this.source}', '_blank');">Link to source</button>
           <!-- event.stopPropagation() stops the button from following the a tag. event.preventDefault() prevents the anchor's default action -->
-           <p>Site ID: ${this.id}</p>
+           <p><b>Site ID: </b>${this.id}</p>
           <!-- Nested <a> tags are illegal -->
         </div>
       </a>
